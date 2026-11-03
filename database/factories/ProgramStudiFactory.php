@@ -12,13 +12,16 @@ class ProgramStudiFactory extends Factory
 {
     public function definition(): array
     {
+        // Kode dan nama dipilih sebagai satu pasangan agar selalu cocok dan tidak kembar
+        [$kode, $nama] = fake()->unique()->randomElement([
+            ['SI', 'Sistem Informasi'],
+            ['TI', 'Teknik Informatika'],
+            ['MI', 'Manajemen Informatika'],
+        ]);
+
         return [
-            'kode_prodi' => fake()->unique()->randomElement(['SI', 'TI', 'MI']),
-            'nama'       => fake()->randomElement([
-                'Sistem Informasi',
-                'Teknik Informatika',
-                'Manajemen Informatika',
-            ]),
+            'kode_prodi' => $kode,
+            'nama'       => $nama,
         ];
     }
 }
