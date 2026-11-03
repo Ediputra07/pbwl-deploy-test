@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bootstrap')
 @section('title', 'Mata Kuliah')
 @section('content')
 <div class="d-flex justify-content-between mb-3">

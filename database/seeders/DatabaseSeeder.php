@@ -11,8 +11,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(UserSeeder::class);
+        $this->call([
+            RoleSeeder::class,
+            UserSeeder::class,
+        ]);
 
+        // Data dummy dari Modul 2 tetap dipertahankan
         $mahasiswa = Mahasiswa::factory(20)->create();
 
         ProgramStudi::factory(3)->create()->each(function ($satuProdi) use ($mahasiswa) {

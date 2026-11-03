@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bootstrap')
 @section('title', 'Detail Mata Kuliah')
 @section('content')
 <h3>{{ $mataKuliah->kode_mk }} - {{ $mataKuliah->nama_mk }}</h3>

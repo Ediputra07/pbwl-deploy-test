@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.bootstrap')
 @section('title', 'Klien API Mata Kuliah')
 @section('content')
 <h3>Klien API Mata Kuliah</h3>
