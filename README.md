@@ -50,6 +50,10 @@ Konfigurasi database ada di `.env` (default: MySQL, user `root`, tanpa password)
 
 Akun ini hanya untuk lingkungan lokal praktikum.
 
+## Cek Cepat
+
+Instalasi berhasil jika: halaman `/login` tampil dengan gaya (bukan teks polos), masuk sebagai `mahasiswa@gmail.com` membawa ke dashboard, dan `/mata-kuliah` menampilkan daftar mata kuliah. Jika tidak, lihat bagian [Masalah Umum](#masalah-umum).
+
 ## Halaman Penting
 
 | URL | Keterangan |
@@ -69,6 +73,17 @@ git checkout main        # kembali ke kondisi terbaru
 ```
 
 Tag tersedia: `modul-2`, `modul-3`, `modul-4`, `modul-5`.
+
+Saat berada di sebuah tag, Git dalam mode *detached HEAD*: gunakan hanya untuk melihat. Kerjakan tugas dan modul di `main` (atau di branch milikmu sendiri).
+
+## Persiapan Modul 6
+
+1. Clone repository ini dan ikuti bagian [Instalasi](#instalasi).
+2. Pastikan [Cek Cepat](#cek-cepat) lolos.
+3. Kerjakan Modul 6 di branch sendiri agar `main` tetap bersih:
+   ```bash
+   git switch -c modul-6
+   ```
 
 ## Masalah Umum
 
