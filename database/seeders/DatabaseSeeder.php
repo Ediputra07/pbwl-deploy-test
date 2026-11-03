@@ -11,6 +11,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call(UserSeeder::class);
+
         $mahasiswa = Mahasiswa::factory(20)->create();
 
         ProgramStudi::factory(3)->create()->each(function ($satuProdi) use ($mahasiswa) {
