@@ -1,9 +1,20 @@
 <?php
 
-use App\Http\Controllers\MataKuliahController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => redirect()->route('mata-kuliah.index'));
-Route::resource('mata-kuliah', MataKuliahController::class);
+Route::get('/', function () {
+    return view('welcome');
+});
 
-Route::view('/klien', 'klien.mata-kuliah')->name('klien.mata-kuliah');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
