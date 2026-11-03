@@ -1,57 +1,86 @@
-# PBWL Modul 4 — RESTful API dan Konsumsi API
+# PBWL Kelas C — Starter Praktikum
 
-Project praktikum Pemrograman Berbasis Web Lanjut (PBWL) menggunakan Laravel untuk implementasi RESTful API dan konsumsi API pada halaman web.
+Project dasar Praktikum Pemrograman Berbasis Web Lanjut (Sistem Informasi, UTM) dengan studi kasus **KRS** (Program Studi, Mata Kuliah, Mahasiswa). Kondisi project sama dengan akhir **Modul 5**: CRUD Mata Kuliah, REST API v1 dengan Sanctum, autentikasi Breeze, dan RBAC Spatie.
 
-## Teknologi
+## Kebutuhan
 
-- PHP
-- Laravel
-- MySQL
-- RESTful API
-- Blade dan JavaScript
+| Perangkat | Versi |
+|---|---|
+| PHP | 8.4.27 atau lebih baru (minimal 8.3.36 atau 8.5.12), ekstensi `zip` aktif |
+| Composer | 2.x |
+| Node.js | 20 atau lebih baru |
+| MySQL | 8.x (Laragon) |
+| Git | 2.x |
 
-## Persiapan Project
+Disarankan Laragon (Windows). Jalankan perintah di Git Bash.
 
-1. Clone repository:
-   ```bash
-   git clone https://github.com/oktaviaputrirj/PBWL-Modul4.git
-   ```
+## Instalasi
 
-2. Masuk ke folder project:
-   ```bash
-   cd PBWL-Modul4
-   ```
+```bash
+git clone https://github.com/Ediputra07/pbwl-kelas-c.git
+cd pbwl-kelas-c
 
-3. Install dependency PHP:
-   ```bash
-   composer install
-   ```
+composer install
+cp .env.example .env
+php artisan key:generate
+```
 
-4. Salin file konfigurasi:
-   ```bash
-   copy .env.example .env
-   ```
+Buat database kosong bernama `db_pbwl_kelas_c` (lewat SQLyog atau HeidiSQL), lalu:
 
-5. Buat application key:
-   ```bash
-   php artisan key:generate
-   ```
+```bash
+php artisan migrate --seed
+npm install
+npm run build
+```
 
-6. Sesuaikan konfigurasi database di file `.env`, lalu buat database MySQL untuk project ini.
+Konfigurasi database ada di `.env` (default: MySQL, user `root`, tanpa password). Sesuaikan jika berbeda.
 
-7. Jalankan migration:
-   ```bash
-   php artisan migrate
-   ```
+## Menjalankan
 
-8. Jalankan server Laravel:
-   ```bash
-   php artisan serve
-   ```
+- **Laragon:** letakkan folder di `C:\laragon\www\`, restart Laragon, buka `http://pbwl-kelas-c.test`.
+- **Tanpa Laragon:** `php artisan serve`, lalu buka `http://localhost:8000` dan ubah `APP_URL` di `.env`.
 
-9. Buka halaman konsumsi API:
-   `http://127.0.0.1:8000/mata-kuliah`
+## Akun Uji
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@gmail.com` | `password` |
+| Dosen | `dosen@gmail.com` | `password` |
+| Mahasiswa | `mahasiswa@gmail.com` | `password` |
+
+Akun ini hanya untuk lingkungan lokal praktikum.
+
+## Halaman Penting
+
+| URL | Keterangan |
+|---|---|
+| `/login` | Halaman masuk |
+| `/mata-kuliah` | CRUD Mata Kuliah (wajib login) |
+| `/klien` | Klien API (fetch + token) |
+| `/api/v1/mata-kuliah` | REST API |
+
+## Riwayat per Modul
+
+Setiap modul memiliki tag. Untuk melihat kondisi pada modul tertentu:
+
+```bash
+git checkout modul-3     # lihat kondisi akhir Modul 3
+git checkout main        # kembali ke kondisi terbaru
+```
+
+Tag tersedia: `modul-2`, `modul-3`, `modul-4`, `modul-5`.
+
+## Masalah Umum
+
+| Gejala | Solusi |
+|---|---|
+| `could not find driver` / `zip` hilang | Aktifkan ekstensi di Laragon: Menu → PHP → Extensions |
+| `Access denied for user 'root'` | Periksa `DB_USERNAME` dan `DB_PASSWORD` di `.env`, lalu `php artisan config:clear` |
+| `Unknown database` | Buat database `db_pbwl_kelas_c` terlebih dahulu |
+| Halaman tanpa gaya (Tailwind) | Jalankan `npm run build` |
+| Perubahan `.env` tidak terbaca | `php artisan config:clear` |
 
 ## Catatan
 
-Pastikan konfigurasi database sudah sesuai sebelum menjalankan migration. File `.env` tidak disertakan dalam repository karena berisi konfigurasi lokal.
+- `APP_DEBUG=true` hanya untuk pengembangan lokal; jangan dipakai di server publik.
+- File `.env` tidak masuk repository. Jangan meng-commit kredensial.
