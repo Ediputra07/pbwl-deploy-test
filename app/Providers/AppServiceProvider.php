@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Mode ketat: error jika ada mass assignment yang dibuang
+        Model::preventSilentlyDiscardingAttributes(! app()->isProduction());
+
+        // Dari Modul 2: error jika terjadi lazy loading (N+1)
+        Model::preventLazyLoading(! app()->isProduction());
+
+        Paginator::useBootstrapFive();
     }
 }

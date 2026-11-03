@@ -1,10 +1,7 @@
 <?php
 
+use App\Http\Controllers\MataKuliahController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::view('/mata-kuliah', 'mata-kuliah')
-    ->name('klien.mata-kuliah');
+Route::get('/', fn () => redirect()->route('mata-kuliah.index'));
+Route::resource('mata-kuliah', MataKuliahController::class);

@@ -2,65 +2,80 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Matakuliah;
-
 use App\Http\Requests\StoreMataKuliahRequest;
 use App\Http\Requests\UpdateMataKuliahRequest;
-use App\Http\Resources\V1\MataKuliahResource;
-use Illuminate\Http\Response;
+use App\Models\MataKuliah;
+use App\Models\ProgramStudi;
+use Illuminate\Http\Request;
 
 class MataKuliahController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $mataKuliahs = MataKuliah::with('programStudi')
-            ->orderBy('kode_mk')
-            ->paginate(10);
+        $mataKuliah = MataKuliah::with('programStudi')
+            ->withCount('mahasiswa')
+            ->when($request->filled('cari'), function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('nama_mk', 'like', '%' . $request->cari . '%')
+                      ->orWhere('kode_mk', 'like', '%' . $request->cari . '%');
+                });
+            })
+            ->when($request->filled('prodi'), fn ($q) => $q->where('program_studi_id', $request->prodi))
+            ->when($request->boolean('hanya_aktif'), fn ($q) => $q->dibuka())
+            ->latest()
+            ->paginate(10)
+            ->withQueryString(); // agar parameter cari/filter terbawa saat pindah halaman
 
-        return MataKuliahResource::collection($mataKuliahs);
+        return view('mata-kuliah.index', [
+            'mataKuliah'   => $mataKuliah,
+            'programStudi' => ProgramStudi::orderBy('nama')->get(),
+        ]);
+    }
+
+    public function create()
+    {
+        return view('mata-kuliah.create', [
+            'mataKuliah'   => new MataKuliah(),
+            'programStudi' => ProgramStudi::orderBy('nama')->get(),
+        ]);
     }
 
     public function store(StoreMataKuliahRequest $request)
     {
-        $mataKuliah = MataKuliah::create(
-            $request->validated()
-        );
+        MataKuliah::create($request->validated());
 
-        $mataKuliah->load('programStudi');
-
-        return (new MataKuliahResource($mataKuliah))
-            ->additional([
-                'message' => 'Mata kuliah berhasil ditambahkan.'
-            ])
-            ->response()
-            ->setStatusCode(201);
+        return redirect()->route('mata-kuliah.index')
+                         ->with('success', 'Mata kuliah berhasil ditambahkan.');
     }
 
-    public function show(MataKuliah $mataKuliah): MataKuliahResource
+    public function show(MataKuliah $mataKuliah)
     {
-        return new MataKuliahResource(
-            $mataKuliah->load('programStudi')
-        );
+        $mataKuliah->load(['programStudi', 'mahasiswa']);
+
+        return view('mata-kuliah.show', compact('mataKuliah'));
     }
 
-    public function update(
-        UpdateMataKuliahRequest $request,
-        MataKuliah $mataKuliah
-    ): MataKuliahResource {
+    public function edit(MataKuliah $mataKuliah)
+    {
+        return view('mata-kuliah.edit', [
+            'mataKuliah'   => $mataKuliah,
+            'programStudi' => ProgramStudi::orderBy('nama')->get(),
+        ]);
+    }
+
+    public function update(UpdateMataKuliahRequest $request, MataKuliah $mataKuliah)
+    {
         $mataKuliah->update($request->validated());
 
-        $mataKuliah->load('programStudi');
-
-        return (new MataKuliahResource($mataKuliah))
-            ->additional([
-                'message' => 'Mata kuliah berhasil diperbarui.'
-            ]);
+        return redirect()->route('mata-kuliah.index')
+                         ->with('success', 'Mata kuliah berhasil diperbarui.');
     }
 
-    public function destroy(MataKuliah $mataKuliah): Response
+    public function destroy(MataKuliah $mataKuliah)
     {
         $mataKuliah->delete();
 
-        return response()->noContent();
+        return redirect()->route('mata-kuliah.index')
+                         ->with('success', 'Mata kuliah berhasil dihapus.');
     }
 }
