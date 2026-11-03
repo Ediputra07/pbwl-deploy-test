@@ -60,7 +60,7 @@ Instalasi berhasil jika: halaman `/login` tampil dengan gaya (bukan teks polos),
 |---|---|
 | `/login` | Halaman masuk |
 | `/mata-kuliah` | CRUD Mata Kuliah (wajib login) |
-| `/klien` | Klien API (fetch + token) |
+| `/klien` | Klien API: daftar tampil otomatis; login di halaman ini (token) untuk tambah, ubah, dan hapus |
 | `/api/v1/mata-kuliah` | REST API |
 
 ## Riwayat per Modul
@@ -94,8 +94,11 @@ Saat berada di sebuah tag, Git dalam mode *detached HEAD*: gunakan hanya untuk m
 | `Unknown database` | Buat database `db_pbwl_kelas_c` terlebih dahulu |
 | Halaman tanpa gaya (Tailwind) | Jalankan `npm run build` |
 | Perubahan `.env` tidak terbaca | `php artisan config:clear` |
+| `Duplicate entry` saat seed | Database sudah terisi. Jalankan `php artisan migrate:fresh --seed` (menghapus seluruh isi database) |
+| `running scripts is disabled` di PowerShell | Gunakan Git Bash |
 
 ## Catatan
 
+- Starter ini sengaja belum membatasi aksi per peran pada API (mahasiswa masih bisa mengubah atau menghapus data). Pembatasan itu dipelajari dan ditambahkan di Modul 6.
 - `APP_DEBUG=true` hanya untuk pengembangan lokal; jangan dipakai di server publik.
 - File `.env` tidak masuk repository. Jangan meng-commit kredensial.
