@@ -23,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            \URL::forceScheme('https');
+        }
         // Mode ketat: error jika ada mass assignment yang dibuang
         Model::preventSilentlyDiscardingAttributes(! app()->isProduction());
 
