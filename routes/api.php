@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\V1\ProgramStudiController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('v1.')->group(function () {
-    Route::post('login', [AuthController::class, 'login'])->name('login');
+    Route::post('login', [AuthController::class, 'login'])->name('login')->middleware('throttle:5,1');
     Route::get('program-studi', [ProgramStudiController::class, 'index'])->name('program-studi.index');
     Route::apiResource('mata-kuliah', MataKuliahController::class);
 

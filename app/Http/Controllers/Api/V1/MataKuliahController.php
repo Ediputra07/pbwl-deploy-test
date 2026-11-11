@@ -9,6 +9,7 @@ use App\Http\Resources\V1\MataKuliahResource;
 use App\Models\MataKuliah;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class MataKuliahController extends Controller
 {
@@ -27,6 +28,8 @@ class MataKuliahController extends Controller
     #[Middleware('auth:sanctum')]
     public function store(StoreMataKuliahRequest $request)
     {
+        Gate::authorize('kelola-mata-kuliah');
+
         $mk = MataKuliah::create($request->validated());
 
         return (new MataKuliahResource($mk->load('programStudi')->loadCount('mahasiswa')))
@@ -41,6 +44,8 @@ class MataKuliahController extends Controller
     #[Middleware('auth:sanctum')]
     public function update(UpdateMataKuliahRequest $request, MataKuliah $mataKuliah)
     {
+        Gate::authorize('update', $mataKuliah);
+
         $mataKuliah->update($request->validated());
 
         return new MataKuliahResource($mataKuliah->load('programStudi')->loadCount('mahasiswa'));
@@ -49,6 +54,8 @@ class MataKuliahController extends Controller
     #[Middleware('auth:sanctum')]
     public function destroy(MataKuliah $mataKuliah)
     {
+        Gate::authorize('delete', $mataKuliah);
+
         $mataKuliah->delete();
 
         return response()->noContent();

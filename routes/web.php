@@ -20,7 +20,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // CRUD Mata Kuliah (Modul 3) kini berada di balik login
-    Route::resource('mata-kuliah', MataKuliahController::class);
+    Route::resource('mata-kuliah', MataKuliahController::class)
+        ->only(['create', 'store'])
+        ->middleware('can:kelola-mata-kuliah');
+
+    Route::resource('mata-kuliah', MataKuliahController::class)
+        ->except(['create', 'store']);
 });
 
 // 1. Khusus Admin

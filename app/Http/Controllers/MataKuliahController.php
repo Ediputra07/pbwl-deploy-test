@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateMataKuliahRequest;
 use App\Models\MataKuliah;
 use App\Models\ProgramStudi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class MataKuliahController extends Controller
 {
@@ -42,7 +43,9 @@ class MataKuliahController extends Controller
 
     public function store(StoreMataKuliahRequest $request)
     {
-        MataKuliah::create($request->validated());
+        $mataKuliah = new MataKuliah($request->validated());
+        $mataKuliah->user_id = $request->user()->id;
+        $mataKuliah->save();
 
         return redirect()->route('mata-kuliah.index')
                          ->with('success', 'Mata kuliah berhasil ditambahkan.');
@@ -57,6 +60,8 @@ class MataKuliahController extends Controller
 
     public function edit(MataKuliah $mataKuliah)
     {
+        Gate::authorize('update', $mataKuliah);
+
         return view('mata-kuliah.edit', [
             'mataKuliah'   => $mataKuliah,
             'programStudi' => ProgramStudi::orderBy('nama')->get(),
@@ -65,6 +70,8 @@ class MataKuliahController extends Controller
 
     public function update(UpdateMataKuliahRequest $request, MataKuliah $mataKuliah)
     {
+        Gate::authorize('update', $mataKuliah);
+
         $mataKuliah->update($request->validated());
 
         return redirect()->route('mata-kuliah.index')
@@ -73,6 +80,8 @@ class MataKuliahController extends Controller
 
     public function destroy(MataKuliah $mataKuliah)
     {
+        Gate::authorize('delete', $mataKuliah);
+
         $mataKuliah->delete();
 
         return redirect()->route('mata-kuliah.index')

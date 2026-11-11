@@ -3,7 +3,9 @@
 @section('content')
 <div class="d-flex justify-content-between mb-3">
     <h3>Daftar Mata Kuliah</h3>
-    <a href="{{ route('mata-kuliah.create') }}" class="btn btn-primary">+ Tambah</a>
+    @can('kelola-mata-kuliah')
+        <a href="{{ route('mata-kuliah.create') }}" class="btn btn-primary">+ Tambah</a>
+    @endcan
 </div>
 
 <form method="GET" action="{{ route('mata-kuliah.index') }}" class="row g-2 mb-3">
@@ -45,13 +47,17 @@
             <td>{{ $mk->status_aktif ? 'Aktif' : 'Nonaktif' }}</td>
             <td>
                 <a href="{{ route('mata-kuliah.show', $mk) }}" class="btn btn-sm btn-info">Detail</a>
-                <a href="{{ route('mata-kuliah.edit', $mk) }}" class="btn btn-sm btn-warning">Ubah</a>
-                <form action="{{ route('mata-kuliah.destroy', $mk) }}" method="POST"
-                      class="d-inline" onsubmit="return confirm('Hapus data ini?')">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-sm btn-danger">Hapus</button>
-                </form>
+                @can('update', $mk)
+                    <a href="{{ route('mata-kuliah.edit', $mk) }}" class="btn btn-sm btn-warning">Ubah</a>
+                @endcan
+                @can('delete', $mk)
+                    <form action="{{ route('mata-kuliah.destroy', $mk) }}" method="POST"
+                          class="d-inline" onsubmit="return confirm('Hapus data ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-sm btn-danger">Hapus</button>
+                    </form>
+                @endcan
             </td>
         </tr>
     @empty

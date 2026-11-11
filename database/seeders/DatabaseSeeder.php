@@ -29,5 +29,8 @@ class DatabaseSeeder extends Seeder
                     $satuMataKuliah->mahasiswa()->attach($mahasiswa->random(10)->pluck('id'));
                 });
         });
+
+        // Modul 6: isi pemilik (user_id) mata kuliah, setelah mata kuliah dibuat
+        $this->call(PengampuSeeder::class);
     }
 }
